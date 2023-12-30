@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id        Int            @id @default(autoincrement())
+  name      String         @db.VarChar(255)
+  inStock   Boolean        @default(false) @map("in_stock")
+  category  String
+  price     Int
+  createdAt DateTime       @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime?      @map("updated_at") @db.Timestamp(0)
+  deletedAt DateTime?      @map("deleted_at") @db.Timestamp(0)
+  images    ProductImage[]
+  userId    Int
+  User      User           @relation(fields: [userId], references: [id])
+
+  @@map(name: "products")
+}
+
+model ProductImage {
+  id        Int       @id @default(autoincrement())
+  fileName  String    @map("file_name") @db.Text
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime? @map("updated_at") @db.Timestamp(0)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(0)
+  productId Int       @map("product_id")
+  Product   Product   @relation(fields: [productId], references: [id])
+
+  @@map(name: "product_images")
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  emailVerifiedAt String?   @map("email_verified_at")
+  password        String
+  rememberToken   String?   @unique @map("remember_token")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt       DateTime? @map("updated_at") @db.Timestamp(0)
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamp(0)
+  Product         Product[]
+
+  @@map(name: "users")
+}
