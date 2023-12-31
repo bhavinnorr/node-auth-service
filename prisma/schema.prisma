@@ -16,6 +16,7 @@ model Product {
   inStock   Boolean        @default(false) @map("in_stock")
   category  String
   price     Int
+  isActive  Boolean        @default(true) @map("is_active")
   createdAt DateTime       @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt DateTime?      @map("updated_at") @db.Timestamp(0)
   deletedAt DateTime?      @map("deleted_at") @db.Timestamp(0)
@@ -45,6 +46,7 @@ model User {
   emailVerifiedAt String?   @map("email_verified_at")
   password        String
   rememberToken   String?   @unique @map("remember_token")
+  isActive        Boolean   @default(true) @map("is_active")
   createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt       DateTime? @map("updated_at") @db.Timestamp(0)
   deletedAt       DateTime? @map("deleted_at") @db.Timestamp(0)
